@@ -1,19 +1,26 @@
 import React from 'react';
-import { StyleSheet, FlatList } from 'react-native';
-import TodoItemComponent from './TodoItem';
-const todoItems = [
-  { key: '0', title: "Create first todo", isCompleted: true },
-  { key: '1', title: "Climb a mountain", isCompleted: false },
-  { key: '2', title: "Create React Native blog post", isCompleted: false },
- ];
-export default function TodoList({todoItems, ...props}) {
-  console.log(todoItems)
+import { StyleSheet, SectionList, Text, Alert} from 'react-native';
+import TodoItem from './TodoItem';
+
+export default function TodoList({todoItems, onToggleItemCompleted, onDeleteItem, ...props}) {
+  let activeItems = todoItems.filter(i => !i.isCompleted);
+  let completedItems = todoItems.filter(i => i.isCompleted);
+  let sections = [
+    { title:"Active", data:activeItems },
+    { title:"Completed", data:completedItems},
+  ];
+
   return (
-    
-    <FlatList style={styles.container}
-      data={todoItems}
+    <SectionList style={styles.container}
+      sections={sections}
       
-      renderItem={({item, index, section}) => <TodoItemComponent {...item} />}
+      renderItem={({item}) => <TodoItem {...item} itemKey={item.key}
+      
+                                                onToggleCompleted={onToggleItemCompleted}
+                                                onDeleteItem={onDeleteItem} />}
+      renderSectionHeader={({section: {title}}) => (
+        <Text style={styles.sectionHeader}>{title}</Text>
+      )}
     />
   );
 }
@@ -22,5 +29,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+  sectionHeader: {
+    fontWeight: 'bold',
+    backgroundColor: '#eee',
+    paddingTop: 5,
+    paddingBottom: 5,    
   },
 });

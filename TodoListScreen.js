@@ -1,15 +1,14 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import TodoList from './Components/TodoList'
 import { StyleSheet, SafeAreaView, Button, AsyncStorage } from 'react-native';
+import TodoList from './Components/TodoList';
 
-const todoItems = [
+const initialTodoItems = [
   { key: '0', title: "Create first todo", isCompleted: true },
   { key: '1', title: "Climb a mountain", isCompleted: false },
   { key: '2', title: "Create React Native blog post", isCompleted: false },
  ];
 
- export default class TodoListScreen extends React.Component {
+export default class TodoListScreen extends React.Component {
   static navigationOptions = {
       title: 'Todo List',
   };
@@ -37,9 +36,12 @@ const todoItems = [
     const storedTodoItems = await AsyncStorage.getItem("todoList");
     if(storedTodoItems != null) {
       const storedTodoArray = JSON.parse(storedTodoItems);
+      console.log("initialize stored todo")
+      console.log(storedTodoArray)
       if(storedTodoArray.length) todoItems = storedTodoArray;
     }
-
+    console.log("stored todo items")
+    console.log(todoItems)
     this.setState({todoItems: todoItems}
       , () => AsyncStorage.setItem("todoList", JSON.stringify(this.state.todoItems)));
   }
@@ -84,3 +86,4 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
 });
+

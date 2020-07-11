@@ -12,7 +12,7 @@ export default function tabs(){
 <NavigationContainer>
 <Mytabs.Navigator>
 <Mytabs.Screen name='Home' component={TodoListScreen}/>
-<Mytabs.Screen name = 'AddTodoScreen' component={AddTodoScreen}/>
+<Mytabs.Screen name='AddTodoScreen' component={AddTodoScreen}/>
 </Mytabs.Navigator>
 </NavigationContainer>
   );

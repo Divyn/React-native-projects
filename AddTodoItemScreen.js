@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, TextInput, Button, AsyncStorage } from 'react-native';
 
-export default class TodoListScreen extends React.Component {
+export default class AddTodoListScreen extends React.Component {
   static navigationOptions = {
       title: 'Add Todo Item',
   };
@@ -13,9 +13,11 @@ export default class TodoListScreen extends React.Component {
     this.saveTodoItem = this.saveTodoItem.bind(this);
   }
   async saveTodoItem() {
+    
     let todoItems = [];
     let nextTodoKey = 0;
     const storedTodoItems = await AsyncStorage.getItem("todoList");
+    console.log("stored items",storedTodoItems)
     if(storedTodoItems != null) {
       const storedTodoArray = JSON.parse(storedTodoItems);
       if(storedTodoArray.length) {
@@ -25,18 +27,25 @@ export default class TodoListScreen extends React.Component {
     }
 
     todoItems.push({ key: nextTodoKey.toString(), title: this.state.newTodoTitle });
-
+    console.log("new title",this.state.newTodoTitle)
     await AsyncStorage.setItem("todoList", JSON.stringify(todoItems));
-    this.props.navigation.goBack();
+    
+    this.props.navigation.goBack(null);
+    
+
   }
   render() {
+
     return (
       <View style={styles.container}>
         <TextInput placeholder="Todo Title" value={this.state.newTodoTitle} 
             onChangeText={(text) => this.setState({newTodoTitle: text})} />
         <View style={styles.buttonsRow}>
-            <Button title="Cancel" onPress={() => this.props.navigation.goBack()} />
-            <Button title="Save" onPress={() => this.saveTodoItem()} />
+            <Button title="Cancel" onPress={() => this.props.navigation.goBack(null)} />
+            <Button title="Save" onPress={() => this.saveTodoItem() } />
+         
+         {/* (this.saveTodoItem.bind(this)) */}
+         {/* () => navigate(this.saveTodoItem(),{ go_back_key: state.key }) */}
         </View>
       </View>
     );
@@ -56,3 +65,4 @@ const styles = StyleSheet.create({
       justifyContent: 'space-around',
   },
 });
+
